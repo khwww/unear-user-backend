@@ -1,3 +1,4 @@
+/*
 package com.unear.userservice.notification.service.impl;
 
 import lombok.RequiredArgsConstructor;
@@ -15,3 +16,4 @@ public class SsePingTask {
         emitterPool.sendPingToAll();
     }
 }
+*/

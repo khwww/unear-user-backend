@@ -1,3 +1,4 @@
+/*
 package com.unear.userservice.notification.service.impl;
 
 import com.unear.userservice.notification.dto.request.PosNotificationEventRequest;
@@ -56,3 +57,4 @@ public class SseNotificationService implements NotificationService {
         }
     }
 }
+*/

@@ -1,26 +1,23 @@
+/*
 package com.unear.userservice.notification.redis;
-
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import io.lettuce.core.RedisCommandExecutionException;
-import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.RedisSystemException;
-import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.stream.MapRecord;
-import org.springframework.data.redis.connection.stream.ReadOffset;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.stream.StreamMessageListenerContainer;
+
+import jakarta.annotation.PostConstruct;
+import java.util.Map;
 
 @Configuration
 public class RedisStreamConfig {
@@ -68,30 +65,13 @@ public class RedisStreamConfig {
     }
 
     private void createConsumerGroup(String streamName, String groupName) {
-        RedisConnection conn = null;
         try {
-            conn = connectionFactory.getConnection();
-            conn.streamCommands().xGroupCreate(
-                    streamName.getBytes(),
-                    groupName,
-                    ReadOffset.latest(),
-                    true
-            );
-            log.info("Consumer Group '{}' created for stream '{}'", groupName, streamName);
-        } catch (RedisSystemException | RedisCommandExecutionException e) {
-            log.warn("Consumer Group '{}' for stream '{}' already exists or error: {}",
-                    groupName, streamName, e.getMessage());
+            RedisTemplate<String, Object> template = redisTemplate(connectionFactory);
+            template.opsForStream().createGroup(streamName, groupName);
+            log.info("Created consumer group: {} for stream: {}", groupName, streamName);
         } catch (Exception e) {
-            log.error("Failed to create Consumer Group '{}' for stream '{}': {}",
-                    groupName, streamName, e.getMessage());
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (Exception e) {
-                    log.warn("Failed to close Redis connection: {}", e.getMessage());
-                }
-            }
+            log.warn("Consumer group creation failed (might already exist): {} for stream: {}", groupName, streamName);
         }
     }
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.unear.userservice.notification.controller;
 
 import com.unear.userservice.common.jwt.JwtTokenProvider;
@@ -37,3 +38,4 @@ public class NotificationController {
         return emitterPool.connect(userId);
     }
 }
+*/

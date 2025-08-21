@@ -1,3 +1,4 @@
+/*
 package com.unear.userservice.notification.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -55,50 +56,32 @@ public class PosNotificationStreamConsumer {
         }
     }
 
-    private PosNotificationEventRequest convertToDto(Map<String, String> map) {
-        return PosNotificationEventRequest.builder()
-                .userId(parseLong(map.get("userId")))
-                .stampOrder(parseInt(map.get("stampOrder"), 0))
-                .type(parseEnum(map.get("type")))
-                .message(map.getOrDefault("message", ""))
-                .relatedPlaceId(parseLong(map.get("relatedPlaceId")))
-                .relatedPlaceName(map.get("relatedPlaceName"))
-                .relatedEventId(parseLong(map.get("relatedEventId")))
-                .discountAmount(parseLong(map.get("discountAmount")))
-                .finalAmount(parseLong(map.get("finalAmount")))
-                .build();
-    }
-
-    private int parseInt(String val, int defaultVal) {
-        if (val == null || val.isBlank()) return defaultVal;
-        val = val.replaceAll("\"", "").trim();
+    private PosNotificationEventRequest convertToDto(Map<String, String> value) {
         try {
-            return Integer.parseInt(val);
-        } catch (NumberFormatException e) {
-            log.warn("잘못된 Int 형식: {}", val);
-            return defaultVal;
+            String userIdStr = value.get("userId");
+            String typeStr = value.get("type");
+            String eventIdStr = value.get("eventId");
+            String placeIdStr = value.get("placeId");
+            String amountStr = value.get("amount");
+
+            Long userId = Long.parseLong(userIdStr);
+            PosNotificationType type = PosNotificationType.valueOf(typeStr);
+            Long eventId = eventIdStr != null ? Long.parseLong(eventIdStr) : null;
+            Long placeId = placeIdStr != null ? Long.parseLong(placeIdStr) : null;
+            Integer amount = amountStr != null ? Integer.parseInt(amountStr) : null;
+
+            return PosNotificationEventRequest.builder()
+                    .userId(userId)
+                    .type(type)
+                    .eventId(eventId)
+                    .placeId(placeId)
+                    .amount(amount)
+                    .build();
+
+        } catch (Exception e) {
+            log.error("DTO 변환 실패: {}", e.getMessage());
+            throw new RuntimeException("Invalid notification data", e);
         }
     }
-
-    private Long parseLong(String val) {
-        if (val == null) return null;
-        val = val.replaceAll("\"", "").trim();
-        try { return Long.parseLong(val); } catch (NumberFormatException e) {
-            log.warn("잘못된 Long 형식: {}", val);
-            return null;
-        }
-    }
-
-    private PosNotificationType parseEnum(String val) {
-        if (val == null || val.isBlank()) return null;
-        val = val.replaceAll("\"", "").trim();
-        try {
-            return PosNotificationType.valueOf(val);
-        } catch (IllegalArgumentException e) {
-            log.warn("잘못된 Enum 값: {}", val);
-            return null;
-        }
-    }
-
-
 }
+*/
